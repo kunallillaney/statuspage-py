@@ -1,0 +1,4 @@
+[general]
+SITE_HOST = api.statuspage.io/v1
+PAGE_ID = 
+API_TOKEN = 
