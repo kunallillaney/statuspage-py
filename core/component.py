@@ -1,4 +1,4 @@
-import requests
+from util.rest import *
 from settings import Settings
 settings = Settings()
 
@@ -86,12 +86,11 @@ class Component(object):
     # url format : GET /pages/[page_id]/components.json
     url = 'https://{}/pages/{}/components.json'.format(settings.SITE_HOST, settings.PAGE_ID)
     try:
-      response = requests.get(url, headers={'Authorization': 'OAuth {}'.format(settings.API_TOKEN, verify=True)})
+      response = getUrl(url)
       assert(response.status_code == 200)
     except AssertionError as e:
       raise ValueError("Could not fetch Component list. Returned status code {}. Content: {}".format(response.status_code, response.content))
-    except Exception as e:
-      raise e
+    
     for component in response.json():
       yield(Component.fromDict(component))
 
@@ -106,15 +105,13 @@ class Component(object):
                 }
            }
     try:
-      response = requests.post(url, json=data, headers={'Authorization': 'OAuth {}'.format(settings.API_TOKEN, verify=True)})
+      response = postUrl(url, data)
       assert(response.status_code == 201)
+      self.status = response.json()['status']
+      self.position = response.json()['position']
+      self.id = response.json()['id']
     except AssertionError as e:
       raise ValueError("Could not create Component. Returned status code {}. Content: {}".format(response.status_code, response.content))
-    except Exception as e:
-      raise e
-    self.status = response.json()['status']
-    self.position = response.json()['position']
-    self.id = response.json()['id']
 
   def update(self, status='major_outage'):
     # url format : PATCH /pages/[page_id]/components/[component_id].json
@@ -125,21 +122,17 @@ class Component(object):
                 }
            }
     try:
-      response = requests.patch(url, json=data, headers={'Authorization': 'OAuth {}'.format(settings.API_TOKEN, verify=True)})
+      response = patchUrl(url, data)
       assert(response.status_code == 200)
     except AssertionError as e:
       raise ValueError("Could not update Component. Returned status code {}. Content: {}".format(response.status_code, response.content))
-    except Exception as e:
-      raise e
 
   def delete(self):
     # url = DELETE /pages/[page_id]/components/[component_id].json
     url = 'https://{}/pages/{}/components/{}.json'.format(settings.SITE_HOST, settings.PAGE_ID, self.id)
     try:
-      response = requests.delete(url, headers={'Authorization': 'OAuth {}'.format(settings.API_TOKEN, verify=True)})
+      response = deleteUrl(url)
       assert(response.status_code == 204)
+      self.status = response.json()['status']
     except AssertionError as e:
       raise ValueError("Could not delete Component. Returned status code {}. Content: {}".format(response.status_code, response.content))
-    except Exception as e:
-      raise e
-    self.status = response.json()['status']
