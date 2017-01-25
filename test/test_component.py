@@ -31,13 +31,14 @@ class Test_Component:
     self.component.create()
     
   def test_get_component(self):
-    import pdb; pdb.set_trace()
     component = Component.fromName('Test_Name_1')
     assert(component.name == self.component.name)
     assert(component.id == self.component.id)
     assert(component.description == self.component.description)
 
   def test_delete_component(self):
-    import pdb; pdb.set_trace()
     self.component.delete()
-    component = Component.fromName('Test_Name_1')
+    try:
+      component = Component.fromName('Test_Name_1')
+    except ValueError as e:
+      assert(e.message == 'Component does not exist')

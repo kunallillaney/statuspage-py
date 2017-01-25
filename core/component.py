@@ -147,6 +147,5 @@ class Component(object):
     try:
       response = deleteUrl(url)
       assert(response.status_code == 204)
-      self.status = response.json()['status']
     except AssertionError as e:
       raise ValueError("Could not delete Component. Returned status code {}. Content: {}".format(response.status_code, response.content))
