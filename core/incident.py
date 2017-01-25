@@ -19,12 +19,14 @@ settings = Settings()
 class Incident(object):
 
   def __init__(self):
+    import pdb; pdb.set_trace()
     self._name = None
     self._status = None
     self._message = None
     self._impact_override = None
     self._component_ids = None
     self._wants_twitter_update = None
+    self._incident_id = None
 
   @property
   def name(self):
@@ -57,11 +59,43 @@ class Incident(object):
   @wants_twitter_update.setter
   def wants_twitter_update(self, value):
     self._wants_twitter_update = value
+  
+  @property
+  def impact_override(self):
+    return self._impact_override
+
+  @impact_override.setter
+  def impact_override(self, value):
+    self._impact_override = value
+  
+  @property
+  def component_ids(self):
+    return self._component_ids
+
+  @component_ids.setter
+  def component_ids(self, value):
+    self._component_ids = value
+  
+  @property
+  def component_ids_list(self):
+    component_ids_list = []
+    if self.component_ids:
+      for component in self.component_ids:
+        component_ids_list.append(component)
+    return component_ids_list
+  
+  @property
+  def id(self):
+    return self._id
+
+  @id.setter
+  def id(self, value):
+    self._id = value
 
   @staticmethod
   def list():
     # url format : GET /pages/[page_id]/incidents.json
-    url = 'https://{}/pages/{}/Incidents.json'.format(settings.SITE_HOST, settings.PAGE_ID)
+    url = 'https://{}/pages/{}/incidents.json'.format(settings.SITE_HOST, settings.PAGE_ID)
     try:
       response = getUrl(url)
       assert(response.status_code == 200)
@@ -69,11 +103,37 @@ class Incident(object):
       raise ValueError("Could not fetch incident list. Returned status code {}. Content {}".format(response.status_code, response.content))
     for incident in response.json():
       yield(Incident.fromDict(incident))
+  
+  @staticmethod
+  def fromName(incident_name):
+    incident_list = Incident.list()
+    for incident in incident_list:
+      if incident.name == incident_name:
+        return incident
+    raise ValueError('Incident does not exist')
+  
+  @staticmethod
+  def fromDict(incident_dict):
+    incident = Incident()
+    incident.id = incident_dict['id']
+    incident.name = incident_dict['name']
+    incident.message = incident_dict['incident_updates'][0]['body']
+    return incident
+
+  def delete(self):
+    # url format : DELETE /pages/[page_id]/incidents/[incident_id].json
+    url = 'https://{}/pages/{}/incidents/{}.json'.format(settings.SITE_HOST, settings.PAGE_ID, self.id)
+    try:
+      response = deleteUrl(url)
+      assert(response.status_code == 200)
+    except AssertionError as e:
+      raise ValueError("Could not delete incident. Returned status code {}. Content: {}".format(response.status_code, response.content))
 
 
 class ScheduledIncident(Incident):
 
   def __init__(self):
+    super(ScheduledIncident, self).__init__()
     self._scheduled_for = None
     self._scheduled_until = None
     self._scheduled_remind_prior = None
@@ -83,21 +143,52 @@ class ScheduledIncident(Incident):
   def create(self):
     # url format : POST /pages/[page_id]/incidents.json
     url = 'https://{}/pages/{}/incidents.json'.format(settings.SITE_HOST, settings.PAGE_ID)
-    component_ids_list = []
-    for component in self._component_ids:
-      component_ids_list.append(component)
     data = {
             'incident': {
                 'name': self.name,
                 'status': self.status,
                 'message': self.message,
                 'wants_twitter_update': self.wants_twitter_update,
-                'component_ids': component_ids_list
+                'component_ids': self.component_ids_list
                 }
            }
 
     try:
       response = postUrl(url, data)
       assert(response.status_code == 201)
+      self.id = response.json()['id']
+      # self.impact_override = response.json()['impact_override']
     except AssertionError as e:
       raise ValueError("Could not create incident. Returned status code {}. Content {}".format(response.status_code, response.content))
+
+
+class RealtimeIncident(Incident):
+
+  def __init__(self):
+    super(RealtimeIncident, self).__init__()
+
+  def create(self):
+    # url format : POST /pages/[page_id]/incidents.json
+    url = 'https://{}/pages/{}/incidents.json'.format(settings.SITE_HOST, settings.PAGE_ID)
+    data = {
+            'incident': {
+                'name': self.name,
+                'status': self.status,
+                'message': self.message,
+                'wants_twitter_update': self.wants_twitter_update,
+                'impact_override' : self.impact_override,
+                'component_ids': self.component_ids_list
+                }
+           }
+    
+    try:
+      response = postUrl(url, data)
+      assert(response.status_code == 201)
+      self.id = response.json()['id']
+    except AssertionError as e:
+      raise ValueError("Could not create incident. Returned status code {}. Content {}".format(response.status_code, response.content))
+
+class HistoricalIncident(Incident):
+
+  def __init__(self):
+    super(HistoricalIncident, self).__init__()
