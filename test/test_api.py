@@ -15,7 +15,8 @@
 import pytest
 import sys
 sys.path.append('..')
-from core.incident import RealtimeIncident
+from core.component import Component
+import os
 
 class Test_API_Spdb:
 
@@ -26,14 +27,14 @@ class Test_API_Spdb:
     pass
 
   def test_spdb_api(self):
+    os.chdir('../ndstore/test/')
     component = Component.fromName('Spatial Database API')
-
-    result = (pytest.main(["../ndstore/test/test_blosc.py"]) 
-               + pytest.main(["../ndstore/test/test_image.py"])
-               + pytest.main(["../ndstore/test/test_jpeg.py"])
-               + pytest.main(["../ndstore/test/test_raw.py"])
-               + pytest.main(["../ndstore/test/test_propagate.py"])
-               + pytest.main(["../ndstore/test/test_time.py"]))
+    result = (pytest.main(["test_blosc.py"]) 
+               + pytest.main(["test_image.py"])
+               + pytest.main(["test_jpeg.py"])
+               + pytest.main(["test_raw.py"])
+               + pytest.main(["test_propagate.py"])
+               + pytest.main(["test_time.py"]))
 
     if (result >= 6):
       #Major Outage
@@ -50,10 +51,10 @@ class Test_API_Spdb:
   def test_ramon_api(self):
     component = Component.fromName('Ramon API')
 
-    result = (pytest.main(["../ndstore/test/test_annoid.py"]) 
-               + pytest.main(["../ndstore/test/test_ramon.py"])
-               + pytest.main(["../ndstore/test/test_jsonann.py"])
-               + pytest.main(["../ndstore/test/test_neuron.py"])
+    result = (pytest.main(["test_annoid.py"]) 
+               + pytest.main(["test_ramon.py"])
+               + pytest.main(["test_jsonann.py"])
+               + pytest.main(["test_neuron.py"]))
 
     if (result >= 4):
       #Major Outage
@@ -70,9 +71,9 @@ class Test_API_Spdb:
   def test_io_api(self):
     component = Component.fromName('IO API')
 
-    result = (pytest.main(["../ndstore/test/test_autoingest.py"])
-               + pytest.main(["../ndstore/test/test_io.py"])
-               + pytest.main(["../ndstore/test/test_query.py"])
+    result = (pytest.main(["test_autoingest.py"])
+               + pytest.main(["test_io.py"])
+               + pytest.main(["test_query.py"]))
 
     if (result >= 3):
       #Major Outage
@@ -89,9 +90,9 @@ class Test_API_Spdb:
   def test_stats_api(self):
     component = Component.fromName('Stats/Graph')
 
-    result = (pytest.main(["../ndstore/test/test_graphgen.py"])
-               + pytest.main(["../ndstore/test/test_probability.py"])
-               + pytest.main(["../ndstore/test/test_stats.py"])
+    result = (pytest.main(["test_graphgen.py"])
+               + pytest.main(["test_probability.py"])
+               + pytest.main(["test_stats.py"]))
 
     if (result >= 3):
       #Major Outage
@@ -108,8 +109,8 @@ class Test_API_Spdb:
   def test_metadata_api(self):
     component = Component.fromName('Metadata')
 
-    result = (pytest.main(["../ndstore/test/test_info.py"])
-               + pytest.main(["../ndstore/test/test_resource.py"])
+    result = (pytest.main(["test_info.py"])
+               + pytest.main(["test_resource.py"]))
 
     if (result >= 2):
       #Major Outage
