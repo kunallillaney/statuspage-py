@@ -1,0 +1,3 @@
+[submodule "ndstore"]
+	path = ndstore
+	url = https://github.com/neurodata/ndstore

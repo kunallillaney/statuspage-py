@@ -19,7 +19,6 @@ settings = Settings()
 class Incident(object):
 
   def __init__(self):
-    import pdb; pdb.set_trace()
     self._name = None
     self._status = None
     self._message = None
