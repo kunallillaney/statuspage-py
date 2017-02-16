@@ -10,7 +10,9 @@ setup(
     url='https://github.io/kunallillaney/statuspage-py',
     license='Apache2.0',
     packages=[
-      'statuspage'
+      'statuspage',
+      'statuspage.core',
+      'statuspage.util'
     ],
     setup_requires=[
     ],
