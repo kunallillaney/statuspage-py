@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import requests
-from core.settings import Settings
+from statuspage.core.settings import Settings
 settings = Settings()
 
 def getUrl(url):

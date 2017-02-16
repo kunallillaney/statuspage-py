@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from util.rest import *
+from statuspage.util.rest import *
 from settings import Settings
 settings = Settings()
 
 class Incident(object):
 
   def __init__(self):
-    import pdb; pdb.set_trace()
     self._name = None
     self._status = None
     self._message = None

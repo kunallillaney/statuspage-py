@@ -15,7 +15,7 @@
 import pytest
 import sys
 sys.path.append('..')
-from core.incident import RealtimeIncident
+from statuspage.core.incident import RealtimeIncident
 
 class Test_Realtime_Incident:
 

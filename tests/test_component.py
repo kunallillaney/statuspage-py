@@ -15,7 +15,7 @@
 import pytest
 import sys
 sys.path.append('..')
-from core.component import Component
+from statuspage.core.component import Component
 
 class Test_Component:
 
