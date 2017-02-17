@@ -1,4 +1,5 @@
 # Copyright 2016 Kunal Lillaney (http://kunallillaney.github.io)
+# Alex Eusman 2017
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,27 +17,73 @@ from core.component import Component
 
 #Spatial Database
 component = Component()
-component.name = 'Spatial Database API'
-component.description = 'The following tests: test_blosc, test_image, test_jpeg, test_raw, test_propagate, test_time'
+component.name = 'Test_Blosc'
 component.create()
 
 component = Component()
-component.name = 'IO API'
-component.description = 'The following tests: test_autoingest, test_io, test_query'
+component.name = 'Test_Image'
 component.create()
 
 component = Component()
-component.name = 'Ramon API'
-component.description = 'The following tests: test_annoid, test_ramon, test_jsonann, test_neuron'
+component.name = 'Test_Jpeg'
 component.create()
 
 component = Component()
-component.name = 'Stats/Graph'
-component.description = 'The following tests: test_graphgen, test_probability, test_stats'
+component.name = 'Test_Raw'
 component.create()
 
 component = Component()
-component.name = 'Metadata'
-component.description = 'The following tests: test_info, test_resource, test_settings'
+component.name = 'Test_Propagate'
 component.create()
 
+component = Component()
+component.name = 'Test_Time'
+component.create()
+
+component = Component()
+component.name = 'Test_Autoingest'
+component.create()
+
+component = Component()
+component.name = 'Test_Io' #Change to Anno IO
+component.create()
+
+component = Component()
+component.name = 'Test_Query' #Change to Anno Query
+component.create()
+
+component = Component()
+component.name = 'Test_Annoid'
+component.create()
+
+component = Component()
+component.name = 'Test_Jsonann' #Json Ramon
+component.create()
+
+component = Component()
+component.name = 'Test_Ramon' #HDF5 Ramon
+component.create()
+
+component = Component()
+component.name = 'Test_Neuron' #HDF5 Ramon
+component.create()
+
+component = Component()
+component.name = 'Test_Graphgen'
+component.create()
+
+component = Component()
+component.name = 'Test_Probability'
+component.create()
+
+component = Component()
+component.name = 'Test_Stats'
+component.create()
+
+component = Component()
+component.name = 'Test_Info'
+component.create()
+
+component = Component()
+component.name = 'Test_Resource' #Resource Management
+component.create()
